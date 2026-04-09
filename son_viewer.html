@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Archive — School of the Nabi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1714; --ink-mid:#3d3830; --ink-soft:#7a7060; --ink-ghost:#a89e8c;
+  --parchment:#f5f0e8; --parch-mid:#ede5d5; --parch-dark:#d8cebc;
+  --gold:#b8922a; --gold-lt:#d4a84a; --gold-pale:#f5edd0;
+  --crimson:#7a1818; --crim-pale:#f5eaea;
+  --teal:#1a5440; --teal-pale:#e2eeea;
+  --purple:#3d2a6e; --purp-pale:#eceaf5;
+  --azure:#1a3860; --az-pale:#e6edf5;
+  --amber:#7a5010; --amb-pale:#f5edd8;
+  --seal:#2c2820; --sb:rgba(44,40,32,.12); --sb2:rgba(44,40,32,.22);
+  --fd:'Cinzel',serif; --fb:'EB Garamond',serif; --fm:'JetBrains Mono',monospace;
+  --sw:255px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--parchment);color:var(--ink);font-size:16px;line-height:1.7;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--parch-mid)}::-webkit-scrollbar-thumb{background:var(--parch-dark)}
+
+/* SHELL */
+.shell{display:grid;grid-template-columns:var(--sw) 1fr;grid-template-rows:52px 1fr;height:100vh;overflow:hidden}
+
+/* TOP NAV */
+nav{grid-column:1/-1;background:var(--seal);border-bottom:1px solid rgba(184,146,42,.35);display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem}
+.nav-l{display:flex;align-items:baseline;gap:10px}
+.nav-name{font-family:var(--fd);font-size:13px;font-weight:500;color:var(--gold-lt);letter-spacing:.06em}
+.nav-sub{font-family:var(--fb);font-size:11px;color:var(--ink-ghost);font-style:italic}
+.nav-links{display:flex;align-items:center;gap:20px}
+.nl{font-family:var(--fd);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-ghost);text-decoration:none;transition:color .2s;border:none;background:none;cursor:pointer}
+.nl:hover,.nl.on{color:var(--gold-lt)}
+.nav-cta{font-family:var(--fd);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--seal);background:var(--gold);border:none;padding:6px 14px;cursor:pointer;transition:background .2s}
+.nav-cta:hover{background:var(--gold-lt)}
+
+/* SIDEBAR */
+aside{background:var(--parch-mid);border-right:1px solid var(--sb2);display:flex;flex-direction:column;overflow:hidden}
+.sb-hd{padding:14px 14px 10px;border-bottom:1px solid var(--sb)}
+.sb-sys{font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-ghost);margin-bottom:3px}
+.sb-title{font-family:var(--fd);font-size:12px;font-weight:500;color:var(--ink-mid);letter-spacing:.04em}
+.sb-ct{font-family:var(--fm);font-size:9px;color:var(--ink-ghost);margin-top:2px}
+.sb-search{padding:8px 10px;border-bottom:1px solid var(--sb)}
+.sb-search input{width:100%;padding:5px 9px;font-family:var(--fb);font-size:13px;font-style:italic;background:var(--parchment);border:1px solid var(--sb2);color:var(--ink);outline:none;transition:border-color .2s}
+.sb-search input:focus{border-color:var(--gold)}
+.sb-search input::placeholder{color:var(--ink-ghost)}
+.sb-filters{padding:7px 10px;border-bottom:1px solid var(--sb);display:flex;flex-wrap:wrap;gap:4px}
+.fc{font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border:1px solid var(--sb2);background:var(--parchment);color:var(--ink-soft);cursor:pointer;transition:all .15s}
+.fc:hover{border-color:var(--gold);color:var(--gold)}
+.fc.on{background:var(--gold-pale);border-color:var(--gold);color:var(--gold)}
+.fc.scr.on{background:var(--purp-pale);border-color:var(--purple);color:var(--purple)}
+.fc.stu.on{background:var(--teal-pale);border-color:var(--teal);color:var(--teal)}
+.fc.cdi.on{background:var(--az-pale);border-color:var(--azure);color:var(--azure)}
+.fc.free.on{background:var(--crim-pale);border-color:var(--crimson);color:var(--crimson)}
+.sb-list{flex:1;overflow-y:auto}
+.er{padding:9px 14px;border-bottom:1px solid var(--sb);cursor:pointer;display:flex;align-items:flex-start;gap:8px;transition:background .15s}
+.er:hover{background:var(--parchment)}
+.er.on{background:var(--parchment);border-left:2px solid var(--gold);padding-left:12px}
+.er-bar{width:3px;border-radius:1px;align-self:stretch;flex-shrink:0;margin-top:2px}
+.er-info{flex:1;min-width:0}
+.er-code{font-family:var(--fm);font-size:8px;color:var(--ink-ghost);margin-bottom:1px}
+.er-name{font-family:var(--fd);font-size:11px;font-weight:500;color:var(--ink-mid);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.er-sub{font-family:var(--fb);font-size:10px;font-style:italic;color:var(--ink-ghost);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.er-badge{font-family:var(--fm);font-size:7px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:1px 5px;border-radius:1px;margin-top:3px;display:inline-block}
+.b-free{background:var(--crim-pale);color:var(--crimson)}
+.b-paid{background:var(--gold-pale);color:var(--gold)}
+.b-member{background:var(--purp-pale);color:var(--purple)}
+
+/* MAIN PANEL */
+main{display:flex;flex-direction:column;overflow:hidden;background:var(--parchment)}
+
+/* ENTRY HEADER */
+.e-head{padding:16px 20px 12px;border-bottom:1px solid var(--sb2);background:var(--parch-mid)}
+.e-topline{display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap}
+.e-entrynum{font-family:var(--fm);font-size:9px;color:var(--ink-ghost)}
+.e-collection{font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:1px}
+.e-access{font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:1px}
+.e-title{font-family:var(--fd);font-size:20px;font-weight:500;color:var(--ink);letter-spacing:.03em;line-height:1.2;margin-bottom:4px}
+.e-subtitle{font-family:var(--fb);font-size:14px;font-style:italic;color:var(--ink-soft);line-height:1.4}
+
+/* SUMMARY STRIP */
+.e-summary{display:flex;gap:6px;padding:10px 20px;border-bottom:1px solid var(--sb2);flex-wrap:wrap;background:var(--parch-mid)}
+.sc{padding:7px 10px;min-width:100px}
+.sc-lbl{font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;margin-bottom:2px}
+.sc-val{font-family:var(--fd);font-size:12px;font-weight:500;line-height:1.3}
+.sc-sub{font-family:var(--fb);font-size:10px;font-style:italic;margin-top:1px}
+.sc-arch{background:var(--purp-pale)}.sc-arch .sc-lbl{color:var(--purple)}.sc-arch .sc-val{color:#26215C}.sc-arch .sc-sub{color:var(--purple)}
+.sc-dom{background:var(--gold-pale)}.sc-dom .sc-lbl{color:var(--gold)}.sc-dom .sc-val{color:#3d2800}.sc-dom .sc-sub{color:var(--gold)}
+.sc-el{background:var(--teal-pale)}.sc-el .sc-lbl{color:var(--teal)}.sc-el .sc-val{color:#0a2e22}.sc-el .sc-sub{color:var(--teal)}
+.sc-traj{background:var(--crim-pale)}.sc-traj .sc-lbl{color:var(--crimson)}.sc-traj .sc-val{color:#3d0808}.sc-traj .sc-sub{color:var(--crimson)}
+.sc-tier{background:var(--parch-dark)}.sc-tier .sc-lbl{color:var(--ink-soft)}.sc-tier .sc-val{color:var(--ink-mid)}.sc-tier .sc-sub{color:var(--ink-soft)}
+.sc-scroll{background:var(--purp-pale)}.sc-scroll .sc-lbl{color:var(--purple)}.sc-scroll .sc-val{color:#26215C}.sc-scroll .sc-sub{color:var(--purple)}
+.sc-col{background:var(--teal-pale)}.sc-col .sc-lbl{color:var(--teal)}.sc-col .sc-val{color:#0a2e22}.sc-col .sc-sub{color:var(--teal)}
+.sc-scrip{background:var(--az-pale)}.sc-scrip .sc-lbl{color:var(--azure)}.sc-scrip .sc-val{color:#0a1e3d}.sc-scrip .sc-sub{color:var(--azure)}
+
+/* SCORE STRIP */
+.e-scores{display:flex;gap:14px;align-items:center;padding:7px 20px;border-bottom:1px solid var(--sb);flex-wrap:wrap;background:var(--parch-mid)}
+.si{display:flex;align-items:center;gap:5px}
+.si-lbl{font-family:var(--fm);font-size:9px;color:var(--ink-ghost)}
+.si-bar{width:46px;height:4px;background:var(--parch-dark)}
+.si-fill{height:100%}
+.si-num{font-family:var(--fm);font-size:9px;font-weight:500;color:var(--ink-soft);min-width:16px}
+.sdiv{width:1px;height:14px;background:var(--sb)}
+
+/* TABS */
+.e-tabs{display:flex;border-bottom:1px solid var(--sb2);padding:0 20px;background:var(--parch-mid);overflow-x:auto}
+.tab{font-family:var(--fd);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-ghost);padding:9px 12px;border:none;border-bottom:2px solid transparent;background:none;cursor:pointer;white-space:nowrap;transition:color .2s}
+.tab:hover{color:var(--ink-soft)}
+.tab.on{color:var(--ink-mid);border-bottom:2px solid var(--gold)}
+
+/* PANEL BODY */
+.e-body{flex:1;overflow-y:auto;padding:18px 20px}
+.panel{display:none}
+.panel.on{display:block}
+
+/* FIELD GROUPS */
+.fg{margin-bottom:1.4rem}
+.fg-title{font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-ghost);padding-bottom:5px;border-bottom:1px solid var(--sb);margin-bottom:8px}
+.fr{display:grid;grid-template-columns:130px 1fr;gap:3px 12px;padding:5px 0;border-bottom:1px solid var(--sb);align-items:baseline}
+.fr:last-child{border-bottom:none}
+.fk{font-family:var(--fm);font-size:9px;color:var(--ink-ghost);font-weight:500;line-height:1.5}
+.fv{font-family:var(--fb);font-size:13px;color:var(--ink-mid);line-height:1.55}
+
+/* SCROLL BODY — for Scroll and STU full-text */
+.scroll-body{font-family:var(--fb);font-size:15px;line-height:1.85;color:var(--ink-mid);max-width:660px}
+.scroll-body p{margin-bottom:1rem}
+.scroll-body .burden{font-family:var(--fd);font-size:11px;letter-spacing:.06em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
+.scroll-body .anchor{font-family:var(--fb);font-size:13px;font-style:italic;color:var(--ink-soft);border-left:2px solid var(--gold-pale);padding-left:12px;margin:1rem 0;line-height:1.6}
+.scroll-body h3{font-family:var(--fd);font-size:13px;font-weight:500;letter-spacing:.04em;color:var(--ink);margin:1.25rem 0 .5rem}
+
+/* WATCHPOINTS */
+.wcard{border-left:2px solid var(--gold-lt);background:var(--gold-pale);padding:8px 12px;margin-bottom:7px}
+.wcard-t{font-family:var(--fd);font-size:10px;font-weight:500;color:var(--amber);letter-spacing:.04em;margin-bottom:2px}
+.wcard-b{font-family:var(--fb);font-size:12px;color:var(--ink-mid);line-height:1.55}
+.wcard.crit{border-left-color:var(--crimson);background:var(--crim-pale)}
+.wcard.crit .wcard-t{color:var(--crimson)}
+
+/* SCRIPTURE ANCHORS */
+.sa{display:grid;grid-template-columns:110px 1fr;gap:4px 12px;padding:6px 0;border-bottom:1px solid var(--sb)}
+.sa:last-child{border-bottom:none}
+.sa-ref{font-family:var(--fm);font-size:10px;font-weight:500;color:var(--azure)}
+.sa-note{font-family:var(--fb);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.5}
+
+/* PAT BANNER */
+.pat-banner{background:var(--purp-pale);border-left:2px solid var(--purple);padding:7px 12px;margin-bottom:14px;font-family:var(--fb);font-size:12px;font-style:italic;color:var(--purple);line-height:1.5}
+
+/* DOMINION BOX */
+.dom-box{border:1px solid var(--parch-dark);padding:10px 14px;background:var(--gold-pale);margin-bottom:10px}
+.dom-main{font-family:var(--fd);font-size:13px;font-weight:500;color:#3d2800;margin-bottom:2px}
+.dom-sub{font-family:var(--fb);font-size:12px;font-style:italic;color:var(--gold)}
+
+/* MINI GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.mc{background:var(--parch-mid);padding:8px 10px}
+.mc-l{font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-ghost);margin-bottom:2px}
+.mc-v{font-family:var(--fb);font-size:12px;color:var(--ink-mid);line-height:1.4}
+
+/* OBTAIN PANEL */
+.obtain-panel{background:var(--parch-mid);border-top:1px solid var(--sb2);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.op-desc{font-family:var(--fb);font-size:12px;font-style:italic;color:var(--ink-soft)}
+.op-price{font-family:var(--fd);font-size:16px;font-weight:500;color:var(--gold)}
+.op-free{font-family:var(--fd);font-size:11px;font-weight:500;color:var(--teal);letter-spacing:.04em}
+.op-btn{font-family:var(--fd);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--seal);background:var(--gold);border:none;padding:8px 18px;cursor:pointer;transition:background .2s}
+.op-btn:hover{background:var(--gold-lt)}
+.op-btn.free{background:var(--teal);color:#fff}
+.op-btn.free:hover{background:#1a5c4a}
+.op-btn.member{background:var(--purple);color:#fff}
+.op-btn.member:hover{background:#4d3888}
+
+/* SCROLL TRIGGERS */
+.triggers{display:flex;flex-wrap:wrap;gap:5px;padding:12px 20px;border-top:1px solid var(--sb)}
+.trig{font-family:var(--fb);font-size:11px;font-style:italic;padding:4px 12px;border:1px solid var(--sb2);background:var(--parchment);color:var(--ink-soft);cursor:pointer;transition:all .15s}
+.trig:hover{border-color:var(--gold);color:var(--gold)}
+
+/* NAV STRIP */
+.e-nav{display:flex;justify-content:space-between;align-items:center;padding:8px 20px;border-top:1px solid var(--sb)}
+.e-nav-btn{font-family:var(--fd);font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-ghost);background:none;border:1px solid var(--sb2);padding:5px 12px;cursor:pointer;transition:all .2s}
+.e-nav-btn:hover{border-color:var(--gold);color:var(--gold)}
+.e-nav-pos{font-family:var(--fm);font-size:9px;color:var(--ink-ghost)}
+
+/* TAGS */
+.tag{display:inline-block;font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:1px 5px;border-radius:1px;margin-left:4px;vertical-align:middle}
+.tag-his{background:var(--parch-dark);color:var(--ink-soft)}
+.tag-bib{background:var(--az-pale);color:var(--azure)}
+.tag-geo{background:var(--teal-pale);color:var(--teal)}
+.tag-pat{background:var(--purp-pale);color:var(--purple)}
+.tag-arc{background:var(--gold-pale);color:var(--gold)}
+.tag-sem{background:var(--crim-pale);color:var(--crimson)}
+.tag-inc{background:var(--crim-pale);color:var(--crimson)}
+
+/* EMPTY STATE */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--ink-ghost)}
+.empty-t{font-family:var(--fd);font-size:14px;letter-spacing:.06em;color:var(--ink-soft)}
+.empty-s{font-family:var(--fb);font-size:13px;font-style:italic}
+
+/* HOMEPAGE PANEL */
+.home-panel{padding:2rem 2.5rem;max-width:720px}
+.home-seal{font-family:var(--fm);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-ghost);margin-bottom:1rem;border-bottom:1px solid var(--sb);padding-bottom:.75rem}
+.home-title{font-family:var(--fd);font-size:28px;font-weight:500;color:var(--ink);letter-spacing:.04em;line-height:1.2;margin-bottom:.5rem}
+.home-sub{font-family:var(--fb);font-size:16px;font-style:italic;color:var(--ink-soft);margin-bottom:1.5rem;line-height:1.5}
+.home-verse{font-family:var(--fb);font-size:15px;font-style:italic;color:var(--ink-soft);border-left:2px solid var(--gold-pale);padding-left:14px;margin-bottom:1.5rem;line-height:1.7}
+.home-verse cite{display:block;font-family:var(--fm);font-size:9px;font-style:normal;letter-spacing:.08em;color:var(--ink-ghost);margin-top:4px}
+.home-body{font-family:var(--fb);font-size:14px;color:var(--ink-soft);line-height:1.8;margin-bottom:1.5rem}
+.home-collections{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-bottom:1.5rem}
+.hc{padding:10px 12px;border:1px solid var(--sb2);background:var(--parch-mid)}
+.hc-code{font-family:var(--fm);font-size:9px;color:var(--ink-ghost);margin-bottom:3px}
+.hc-name{font-family:var(--fd);font-size:11px;font-weight:500;color:var(--ink-mid)}
+.hc-desc{font-family:var(--fb);font-size:11px;font-style:italic;color:var(--ink-soft);margin-top:2px;line-height:1.4}
+.hc-ct{font-family:var(--fm);font-size:9px;color:var(--ink-ghost);margin-top:4px}
+.home-cta{display:flex;gap:8px;flex-wrap:wrap}
+.hcta{font-family:var(--fd);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:8px 18px;border:1px solid var(--sb2);background:none;color:var(--ink-soft);cursor:pointer;transition:all .2s}
+.hcta:hover{border-color:var(--gold);color:var(--gold)}
+.hcta.primary{background:var(--gold);border-color:var(--gold);color:var(--seal)}
+.hcta.primary:hover{background:var(--gold-lt)}
+
+@media(max-width:640px){.shell{grid-template-columns:1fr;grid-template-rows:52px 1fr}.shell aside{display:none}.g2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="shell" id="app">
+
+<nav>
+  <div class="nav-l">
+    <span class="nav-name">The Nabi Global</span>
+    <span class="nav-sub">School of the Nabi · Universal Viewer</span>
+  </div>
+  <div class="nav-links">
+    <button class="nl on" onclick="showHome()">Archive</button>
+    <a class="nl" href="https://thenabiglobal.com" target="_blank">Home</a>
+    <a class="nl" href="https://thenabiglobal.com#live" target="_blank">Live Study</a>
+    <button class="nav-cta" onclick="showHome()">Enter the Archive</button>
+  </div>
+</nav>
+
+<aside>
+  <div class="sb-hd">
+    <div class="sb-sys">SON Archive · MADK 6.0</div>
+    <div class="sb-title">Universal SON Viewer</div>
+    <div class="sb-ct" id="sb-ct">Loading entries...</div>
+  </div>
+  <div class="sb-search"><input type="text" placeholder="Search scrolls, studies, nations..." id="srch" oninput="filterEntries()"></div>
+  <div class="sb-filters">
+    <span style="font-family:var(--fm);font-size:8px;color:var(--ink-ghost);align-self:center">Filter:</span>
+    <button class="fc scr" onclick="tf('SCROLL')">Scrolls</button>
+    <button class="fc stu" onclick="tf('STU')">Studies</button>
+    <button class="fc cdi" onclick="tf('CDI')">Nations</button>
+    <button class="fc" onclick="tf('ARC')">Frameworks</button>
+    <button class="fc free" onclick="tf('FREE')">Free access</button>
+    <button class="fc" onclick="tf('VEL')">VEL</button>
+    <button class="fc" onclick="tf('ZION')">ZION</button>
+    <button class="fc" onclick="tf('WAT')">WAT</button>
+    <button class="fc" onclick="tf('WP')">World Papers</button>
+  </div>
+  <div class="sb-list" id="sb-list"></div>
+</aside>
+
+<main id="main-panel">
+  <div class="empty" id="home-view">
+    <div class="home-panel">
+      <div class="home-seal">School of the Nabi · The Archive · thenabiglobal.com</div>
+      <div class="home-title">The Universal SON Viewer</div>
+      <div class="home-sub">A governed canonical archive of scrolls, studies, nation indexes, and frameworks — navigable, searchable, and layered.</div>
+      <div class="home-verse">
+        "And Moses said unto him, Enviest thou for my sake? would God that all the LORD'S people were prophets, and that the LORD would put his spirit upon them!"
+        <cite>Numbers 11:29 (KJV)</cite>
+      </div>
+      <div class="home-body">Select any entry from the sidebar to begin. Use the filter chips to browse by output type or collection. Free entries open immediately. Paid entries show a preview and an obtain button.</div>
+      <div class="home-collections" id="home-cols"></div>
+      <div class="home-cta">
+        <button class="hcta primary" onclick="document.getElementById('srch').focus()">Browse the archive</button>
+        <button class="hcta" onclick="tf('FREE')">Free scrolls only</button>
+        <button class="hcta" onclick="tf('CDI')">Nation index (CDI)</button>
+      </div>
+    </div>
+  </div>
+  <div id="entry-view" style="display:none;flex-direction:column;height:100%;overflow:hidden"></div>
+</main>
+
+</div>
+<script>
+const COLLECTIONS = {
+  VEL:{name:'Veil Collection',desc:'The hidden things — prophetic patterns behind the visible',color:'var(--purple)',pale:'var(--purp-pale)'},
+  ZION:{name:'Zion Collection',desc:'Throne, city, covenant — the mountain of the LORD',color:'var(--gold)',pale:'var(--gold-pale)'},
+  WAT:{name:'Waters Collection',desc:'Sea, river, flood — the theology of the deep',color:'var(--azure)',pale:'var(--az-pale)'},
+  PRT:{name:'Portal Collection',desc:'Gates, thresholds, and passages in scripture',color:'var(--teal)',pale:'var(--teal-pale)'},
+  RED:{name:'Remnant Collection',desc:'The theology of the few — remnant, exile, and return',color:'var(--crimson)',pale:'var(--crim-pale)'},
+  GNT:{name:'Gentile Collection',desc:'Nations, peoples, and the breadth of covenant',color:'var(--amber)',pale:'var(--amb-pale)'},
+  STU:{name:'Study Series',desc:'Structured scripture study with companion guides',color:'var(--teal)',pale:'var(--teal-pale)'},
+  CDI:{name:'Country Deity Index',desc:'200+ nation entries — archetype, dominion, scripture',color:'var(--azure)',pale:'var(--az-pale)'},
+  ARC:{name:'Architecture Frameworks',desc:'System frameworks governing the SON archive',color:'var(--purple)',pale:'var(--purp-pale)'},
+  WP:{name:'World Papers',desc:'Prophetic-geopolitical monographs and expanded studies',color:'var(--gold)',pale:'var(--gold-pale)'},
+  COS:{name:'Cosmos Studies',desc:'Creation, cosmology, and the structure of the ages',color:'var(--ink-mid)',pale:'var(--parch-mid)'},
+};
+
+const TYPE_COLOR = {
+  SCROLL:'var(--purple)',STU:'var(--teal)',CDI:'var(--azure)',
+  ARC:'var(--amber)',WP:'var(--gold)',COS:'var(--ink-soft)',
+};
+
+const ENTRIES = [
+  // ── SCROLLS ──
+  {id:'VEL-001',type:'SCROLL',collection:'VEL',access:'free',
+   title:'The Scroll of the Hidden Name',subtitle:'Concealment and Disclosure in the Divine Self-Identification',
+   burden:'The Name withheld is the Name most active',
+   anchor:'Exodus 3:13–14; Isaiah 45:15; Revelation 19:12',
+   summary:[
+     {k:'Burden',v:'The divine withholding of the Name is not distance but depth — the hidden God acts most decisively in concealment, not revelation.'},
+     {k:'Key motion',v:'Name withheld (Exodus 3) → Name disclosed (Isaiah 52) → Name inscribed on the victor (Revelation 19:12)'},
+     {k:'Governing pattern',v:'Three-phase: concealment → covenant disclosure → cosmic inscription. Each phase escalates, never recedes.'},
+     {k:'Related scrolls',v:'VEL-002 (The Hidden Face) · ZION-001 (Inner City & Throne) · WAT-003 (The Deep Speaks)'},
+   ],
+   scripture:[
+     {ref:'Exodus 3:13–14',note:'"I AM THAT I AM" — the Name as present-tense existence; evasion and disclosure in one utterance'},
+     {ref:'Isaiah 45:15',note:'"Verily thou art a God that hidest thyself" — hiddenness affirmed, not apologized for'},
+     {ref:'Proverbs 25:2',note:'"It is the glory of God to conceal a thing" — concealment as divine prerogative, not failure'},
+     {ref:'Revelation 19:12',note:'"A name written, that no man knew, but he himself" — final Name still withheld at the eschaton'},
+   ],
+   tabs:['summary','scripture','body'],
+   body:`<div class="scroll-body">
+     <div class="burden">Burden of this scroll</div>
+     <p>The Name withheld is the Name most active. This is the governing paradox of the scroll: across the whole biblical narrative, the moments of divine concealment are not moments of divine absence. They are moments of highest engagement.</p>
+     <div class="anchor">"And Moses said unto God, Behold, when I come unto the children of Israel, and shall say unto them, The God of your fathers hath sent me unto you; and they shall say to me, What is his name? what shall I say unto them?" — Exodus 3:13</div>
+     <h3>I. The structure of the hidden name</h3>
+     <p>When Moses asks for the Name, the answer given is not a name in the conventional sense. "I AM THAT I AM" (Hebrew: <em>Ehyeh Asher Ehyeh</em>) is not a proper noun — it is a grammatical structure, a verb in the first person imperfect. It does not say what God is called. It says what God does: God is in the act of being. The Name is a continuous action, not a fixed label.</p>
+     <p>This distinction is not semantic. It is architectural. Throughout the Hebrew scriptures, the full name YHWH is used approximately 6,800 times. Yet in the most pivotal moments — the wrestling at Peniel (Genesis 32), the encounter at Sinai (Exodus 33:19–20), the vision of Isaiah (Isaiah 6) — the Name is either withheld, translated into another form, or declared incomprehensible to the human vessel receiving it.</p>
+     <h3>II. Concealment as custodianship</h3>
+     <p>Proverbs 25:2 makes the claim explicitly: "It is the glory of God to conceal a thing; but the honour of kings is to search out a matter." This verse is not primarily about human kings. The grammar gives the primary agent as God. Divine concealment is framed as a form of glory — not a limitation, not a pedagogical device, but a quality of the divine character itself.</p>
+     <p>The implication is significant for a theology of the archive. If concealment is glorious, then the work of drawing out what is hidden — in scripture, in nations, in prophetic pattern — is itself a kingly work. The school that searches out the concealed matter participates in the honor of kings, by the standard of the proverb itself.</p>
+     <h3>III. The final unsealed name</h3>
+     <p>Revelation 19:12 closes the circuit. The rider on the white horse — the most unambiguous figure of the glorified Christ in Revelation — bears "a name written, that no man knew, but he himself." This is not a new concealment. It is the original concealment sustained to the end of the age. The final victorious appearing of the Word of God does not disclose the innermost Name. The Name remains. The Name is the mystery that outlasts all other mysteries.</p>
+   </div>`,
+   triggers:['VEL-002: The Hidden Face','ZION-001: Inner City and Throne','Isaiah 45 deep study','Exodus 3 divine name exhaustive exegesis'],
+   price:null,
+  },
+
+  {id:'ZION-001',type:'SCROLL',collection:'ZION',access:'free',
+   title:'The Inner City & Throne',subtitle:'The Architecture of the Mountain of the LORD',
+   burden:'Zion is not a location — it is a governing structure',
+   anchor:'Psalm 48; Isaiah 2:2–4; Hebrews 12:22; Revelation 21',
+   summary:[
+     {k:'Burden',v:'Zion precedes Jerusalem geographically, outlasts it historically, and transcends it cosmologically. The throne on the mountain is the governing reality behind every earthly throne.'},
+     {k:'Key motion',v:'Mt. Moriah (sacrifice) → Mt. Zion (kingship) → Heavenly Zion (Hebrews 12) → New Jerusalem (Revelation 21)'},
+     {k:'Registry code',v:'SON-ZION-001 (Expanded) — CSRT canonical scroll'},
+     {k:'Companion study',v:'BIBLE STUDY: The Tree in the World-System (structural pair)'},
+   ],
+   scripture:[
+     {ref:'Psalm 48:1–2',note:'"Great is the LORD, and greatly to be praised in the city of our God, in the mountain of his holiness" — Zion as both geographic and cosmic throne'},
+     {ref:'Isaiah 2:2–4',note:'"The mountain of the LORD\'s house shall be established in the top of the mountains" — Zion\'s eschatological supremacy over all other mountains'},
+     {ref:'Hebrews 12:22',note:'"But ye are come unto mount Sion, and unto the city of the living God, the heavenly Jerusalem" — Zion translated to the heavenly register, accessible now'},
+     {ref:'Revelation 21:2',note:'"And I John saw the holy city, new Jerusalem, coming down from God out of heaven" — the final descent of the mountain-throne into creation'},
+   ],
+   tabs:['summary','scripture'],
+   triggers:['VEL-001: The Hidden Name','The Tree in the World-System study','Isaiah 2 and the mountain of nations','Hebrews 12 and the heavenly assembly'],
+   price:null,
+  },
+
+  {id:'WAT-001',type:'SCROLL',collection:'WAT',access:'paid',price:12,
+   title:'The Scroll of the Rejected Word',subtitle:'Judgment of the Word Spoken and Not Received',
+   burden:'The rejected word does not evaporate — it returns as judgment',
+   anchor:'Isaiah 55:10–11; Matthew 12:36–37; John 12:48',
+   summary:[
+     {k:'Burden',v:'Every word of the LORD spoken into creation carries weight. The word that is rejected is not silenced — it is deferred and returns in a different register: as testimony against the hearer.'},
+     {k:'Key motion',v:'Word released (Isaiah 55:10) → Word received or rejected (Matthew 13) → Rejected word as witness (John 12:48) → Final judgment by the word (Revelation 20:12)'},
+     {k:'Governing text',v:'Isaiah 55:10–11 — the divine word as rain that does not return void: what it cannot accomplish in reception it accomplishes in consequence.'},
+     {k:'Warning layer',v:'Matthew 12:36 — every idle word spoken by men will be accounted for. The principle operates in both directions: divine words rejected and human words spoken carelessly.'},
+   ],
+   scripture:[
+     {ref:'Isaiah 55:10–11',note:'"My word... shall not return unto me void, but it shall accomplish that which I please" — the word\'s mission is sovereign, independent of reception'},
+     {ref:'John 12:48',note:'"The word that I have spoken, the same shall judge him in the last day" — the word itself is the instrument of judgment'},
+     {ref:'Matthew 12:36–37',note:'"Every idle word that men shall speak, they shall give account thereof in the day of judgment" — the word as ledger'},
+     {ref:'Hebrews 4:12',note:'"The word of God is quick and powerful... a discerner of the thoughts and intents of the heart" — the word as surgical instrument, not blunt force'},
+   ],
+   tabs:['summary','scripture'],
+   triggers:['Isaiah 55 full exegesis','John 12 and the judgment of the word','WAT-002: The Deep Calls','Word and silence — the theology of divine restraint'],
+   previewBody:`<div class="scroll-body"><p>The governing axiom of this scroll is that the word of the LORD is not subject to human reception as a condition of its effect. Isaiah 55:10–11 establishes the principle with agricultural precision: rain does not fail because the ground is hard. Rain accomplishes what it was sent to do whether the ground receives it or not...</p><p style="color:var(--ink-ghost);font-style:italic">[Full scroll available — 18 pages · includes exhaustive exegesis of Isaiah 55, John 12, and the Revelation 20 judgment framework]</p></div>`,
+  },
+
+  {id:'PRT-001',type:'SCROLL',collection:'PRT',access:'paid',price:9,
+   title:'The Pillar Scroll',subtitle:'The Architecture of Meeting — Scripture, Science, and Ancient Witness',
+   burden:'Every portal has a keeper and every meeting has a structure',
+   anchor:'Genesis 28:17; Exodus 25:8; John 10:9',
+   summary:[
+     {k:'Burden',v:'The structure of divine encounter is not arbitrary. From the pillar of cloud to the torn veil, scripture traces a consistent architecture: there is always a threshold, a keeper, a protocol, and a consequence for unauthorized entry.'},
+     {k:'Disciplines engaged',v:'Biblical theology · ancient Near East comparative · architectural typology · physics of boundary and threshold'},
+     {k:'Key sites',v:'Bethel (Jacob\'s pillar) → Tabernacle (holy of holies) → Temple (veil) → Body of Christ (torn veil) → Heavenly temple (Revelation 15)'},
+   ],
+   scripture:[
+     {ref:'Genesis 28:17',note:'"This is none other but the house of God, and this is the gate of heaven" — the pillar as portal marker'},
+     {ref:'Exodus 26:33',note:'The veil divides holy from most holy — architecture of degrees of presence'},
+     {ref:'Matthew 27:51',note:'The veil torn from top to bottom at the crucifixion — portal opened by death from above, not below'},
+     {ref:'John 10:9',note:'"I am the door: by me if any man enter in, he shall be saved" — Christ as portal architecture personified'},
+   ],
+   tabs:['summary','scripture'],
+   triggers:['The Tabernacle as cosmological map','PRT-002: The Gate of Nations','Genesis 28 and the cosmic portal','Ancient Near East threshold theology'],
+   previewBody:`<div class="scroll-body"><p>The pillar that Jacob erects at Bethel is not a monument to a personal experience. It is a marker — a registration of a portal. The stone is poured with oil not as ceremony but as consecration: this place has been identified as a point of intersection between the ordinary and the governing realm...</p><p style="color:var(--ink-ghost);font-style:italic">[Full scroll available — 24 pages · includes architectural typology, ANE comparative study, and Revelation 15 eschatological temple]</p></div>`,
+  },
+
+  // ── STUDIES ──
+  {id:'STU-016',type:'STU',collection:'STU',access:'paid',price:18,
+   title:'The Old Ways — The Word "Path" in Scripture',subtitle:'A full lexical and canonical study · SON-STU-016',
+   burden:'The path is not a metaphor — it is a covenant structure',
+   anchor:'Jeremiah 6:16; Psalm 119:105; Matthew 7:13–14',
+   summary:[
+     {k:'Study aim',v:'Trace the Hebrew (derekh, nathiyb, orah, mesillah) and Greek (hodos, tribos) vocabulary for "path" across the full canon — from Eden\'s expulsion to the new creation\'s highway.'},
+     {k:'Sessions',v:'6 structured sessions + leader guide + personal study workbook'},
+     {k:'Key movement',v:'The path as covenant structure: the way out of Eden → the way through the wilderness → the way of the LORD → Christ as "The Way" → the highway of holiness (Isaiah 35)'},
+     {k:'Lexical core',v:'derekh (דֶּרֶך) — 706 occurrences; nathiyb (נָתִיב) — 26; orah (אֹרַח) — 57; hodos (ὁδός) — 101 NT occurrences'},
+   ],
+   scripture:[
+     {ref:'Jeremiah 6:16',note:'"Ask for the old paths, where is the good way, and walk therein, and ye shall find rest for your souls" — the definitive text; the path exists prior to the asking'},
+     {ref:'Isaiah 35:8',note:'"And an highway shall be there, and a way, and it shall be called The way of holiness" — the eschatological path as covenant fulfillment'},
+     {ref:'Psalm 119:105',note:'"Thy word is a lamp unto my feet, and a light unto my path" — word and path as mutually interpreting realities'},
+     {ref:'John 14:6',note:'"I am the way, the truth, and the life" — hodos as divine self-identification; the path becomes a person'},
+   ],
+   tabs:['summary','scripture'],
+   triggers:['Isaiah 35 highway of holiness full study','Jeremiah 6:16 — old paths exegesis','STU-015: The Word "Name" in Scripture','Covenant geography — the paths of the LORD'],
+   previewBody:`<div class="scroll-body"><p>The word <em>derekh</em> appears 706 times in the Hebrew scriptures. It is the most theologically loaded spatial term in the canon. It means road, journey, way, course, manner — and when predicated of the LORD himself, it means something closer to: the mode of his being-in-action. "His way" is not the path he takes. It is the pattern of his movement through history...</p><p style="color:var(--ink-ghost);font-style:italic">[Full study available — 6 sessions · includes workbook + leader guide + full lexical appendix]</p></div>`,
+  },
+
+  {id:'STU-015',type:'STU',collection:'STU',access:'paid',price:18,
+   title:'The Tree in the World-System',subtitle:'Power, Structure, and the Kingdom of God · SON-WP2026-TRE-136',
+   burden:'The tree that shelters empires is the tree that falls before the Kingdom',
+   anchor:'Daniel 4; Ezekiel 31; Matthew 13:31–32; Revelation 22:2',
+   summary:[
+     {k:'Study aim',v:'The "great tree" motif across Daniel, Ezekiel, and the Gospels reveals a consistent typology: empire presents itself as shelter, shade, and source — but it is the tree that must be cut down before the true Kingdom comes.'},
+     {k:'Sessions',v:'4-session Bible study with expanded codex and companion manuscript'},
+     {k:'World-system definition',v:'The principality-backed structure of organized human authority that mimics divine governance — offering shelter without covenant, order without righteousness, and glory without sacrifice.'},
+     {k:'Key movement',v:'Assyria as cosmic cedar (Ezekiel 31) → Babylon as sheltering tree (Daniel 4) → mustard seed as subversive counter-tree (Matthew 13) → Tree of Life restored (Revelation 22)'},
+   ],
+   scripture:[
+     {ref:'Ezekiel 31:3',note:'"Behold, the Assyrian was a cedar in Lebanon" — empire as organic, living, covering structure'},
+     {ref:'Daniel 4:10–12',note:'Nebuchadnezzar\'s tree dream: the world-empire as the tree under whose branches "all flesh was fed" — total provision as idolatry'},
+     {ref:'Matthew 13:31–32',note:'The mustard seed — the Kingdom grows inside the world-system\'s structure, not alongside it'},
+     {ref:'Revelation 22:2',note:'"The tree of life... for the healing of the nations" — the original tree restored, now in service to all peoples'},
+   ],
+   tabs:['summary','scripture'],
+   triggers:['Daniel 4 full exegesis — the world-empire tree','Ezekiel 31 — Assyria as cosmic cedar','CDI: Egypt — the Origin State and the tree of empire','Revelation 22 — the restored tree of life'],
+  },
+
+  // ── CDI NATION ENTRIES ──
+  {id:'CDI-001',type:'CDI',collection:'CDI',access:'free',
+   title:'Egypt',subtitle:'Arab Republic of Egypt · Kemet · Miṣr · جمهورية مصر العربية',
+   archetype:'Origin State',arch_conf:5,
+   dom_primary:'Throne',dom_score:9,dom_secondary:'Gate',dom2_score:7,
+   element:'Earth / Water',trajectory:'Cyclical',traj_phase:'Expansion (2018–)',
+   tier:'Ancient (unified c. 3100 BCE)',
+   scores:{territorial:9,cohesion:6,military:8,symbolic:9,economic:6,momentum:4},
+   summary:[
+     {k:'Classification',v:'Origin–Throne Continuity State · Hydraulic Sovereignty + Chokepoint Control'},
+     {k:'Ancient names',v:'Kemet ("Black Land") · Ta-Mery ("Beloved Land") · Mitzrayim (Hebrew) · Aígyptos (Greek)'},
+     {k:'Lineage',v:'Early Dynastic → Old Kingdom → New Kingdom → Ptolemaic → Roman → Islamic Caliphates → Mamluk → Ottoman → Muhammad Ali → Republic'},
+     {k:'Native rule ratio',v:'~2,500 yrs native / ~2,400 yrs foreign — nearly half under non-native rulers'},
+     {k:'Custodian roles',v:'Nile hydraulic sovereignty (ancient) + Suez Canal passage/toll gate (modern)'},
+   ],
+   watchpoints:[
+     {t:'GERD / Nile water',b:'Ethiopia 4th filling 2024; negotiations failed. First multi-year low-flow threat in 5,000 yrs. Hydraulic sovereignty contested.',crit:true},
+     {t:'Suez vulnerability',b:'Houthi attacks 2023–25 reduced traffic 40%. Ever Given precedent. Bypass routes growing.'},
+     {t:'Delta / climate',b:'1–3 ft sea-level rise by 2100. 10M Egyptians at or below sea level. Agricultural loss accelerating.'},
+     {t:'Economic / cohesion',b:'Inflation 25–35% (2024–26). IMF austerity. Coptic-Muslim tensions periodic. Nubian displacement unresolved.'},
+   ],
+   scripture:[
+     {ref:'Exodus 1–15',note:'Egypt as the definitive prison/oppressor archetype — 200+ references; Pharaoh as archetypal "hard heart"'},
+     {ref:'Isaiah 19:1–25',note:'Complete oracle: judgment (vv. 1–15) → healing → "Blessed be Egypt my people" (v. 25) — only pagan nation receiving Israel\'s covenant title'},
+     {ref:'Ezekiel 29:3',note:'"The great monster lying among your streams" — Egypt as Rahab/sea-dragon; sin of claiming self-creation from the river'},
+     {ref:'Ezekiel 29:15',note:'"A lowly kingdom… never again to rule over the nations" — held 3,000+ years since 1069 BCE'},
+     {ref:'Matthew 2:13–15',note:'Jesus refugee in Egypt — "Out of Egypt I called my son"; land of bondage becomes Messiah\'s asylum'},
+     {ref:'Psalm 87:4',note:'Egypt named as Rahab — cosmic dragon typology connecting Ezekiel thread'},
+   ],
+   apostolic:'Mark the Evangelist founded Church of Alexandria c. 49 CE. Catechetical School (Clement, Origen) synthesized Greek philosophy and revelation. Homoousios concept originated here before Nicaea 325 CE. Desert monasticism (Anthony the Great, Pachomius) founded in Egypt.',
+   endtimes:'Isaiah 19 eschatological triad (Egypt–Israel–Assyria) is strongest positive candidate. All frameworks [PAT] until timeline locked.',
+   tabs:['overview','esoteric','scripture','dominion'],
+   triggers:['Isaiah 19 deep exegesis — the Egypt covenant oracle','Nile covenant theology and the GERD crisis','Alexandria and the formation of Christian doctrine','Egypt CDI full 52-field expanded dossier'],
+  },
+
+  {id:'CDI-006',type:'CDI',collection:'CDI',access:'free',
+   title:'Ethiopia',subtitle:'Federal Democratic Republic of Ethiopia · ኢትዮጵያ',
+   archetype:'Covenant Throne',arch_conf:5,
+   dom_primary:'Throne',dom_score:8,dom_secondary:'Source (Blue Nile)',dom2_score:7,
+   element:'Earth / Water',trajectory:'Cyclical imperial',traj_phase:'Contested expansion',
+   tier:'Ancient (Aksum c. 1st c. BCE)',
+   scores:{territorial:7,cohesion:5,military:8,symbolic:9,economic:5,momentum:6},
+   summary:[
+     {k:'Classification',v:'Covenant-Throne State · Solomonic Lineage + Ark Custody + Blue Nile Source'},
+     {k:'Ancient names',v:'Abyssinia · Aksum · Cush (broad) · Kush (Hebrew)'},
+     {k:'Throne title',v:'Negus Nägäst (King of Kings) — highest imperial title in African history'},
+     {k:'Unique claims',v:'Solomonic dynasty descent (Solomon + Queen of Sheba/Makeda) · Ark of Covenant custody (Axum) · "Lion of Judah" imperial title · Ge\'ez Bible preserves complete 1 Enoch'},
+   ],
+   watchpoints:[
+     {t:'GERD — Blue Nile control',b:'Controls 85% of Nile\'s flow via Lake Tana. Dam completion creates hydraulic power over Egypt and Sudan — first time in 5,000 years.',crit:true},
+     {t:'Tigray post-war reconstruction',b:'2020–2022 war; ethnic federalism tension; reconciliation incomplete.'},
+     {t:'Horn geopolitics',b:'Somaliland port deal; AU tensions with Somalia; Red Sea access competition.'},
+   ],
+   scripture:[
+     {ref:'1 Kings 10:1–13',note:'Queen of Sheba visits Solomon — Ethiopian tradition identifies Makeda; Kebra Nagast records full lineage narrative'},
+     {ref:'Isaiah 18:1–7',note:'"Land beyond the rivers of Cush" — oracle directed specifically to Ethiopia; ambassadors by sea'},
+     {ref:'Psalm 68:31',note:'"Cush will quickly stretch out her hands to God" — eschatological submission and blessing'},
+     {ref:'Acts 8:26–40',note:'Ethiopian eunuch (treasurer of Queen Candace) — first recorded African convert; baptized by Philip; southern apostolic witness'},
+     {ref:'Revelation 5:5',note:'"Lion of Judah" — Ethiopian imperial title; Haile Selassie claimed this title; Rastafari theology built on it'},
+   ],
+   apostolic:'Ethiopian Orthodox Tewahedo Church traces to Acts 8 eunuch + Frumentius c. 316 CE. Ge\'ez Bible preserves 1 Enoch — only complete surviving version in any language. Lalibela rock-hewn churches (12th c.) as Jerusalem typology.',
+   endtimes:'Highest scriptural density of any African CDI entry: Solomonic claim + Ark + Lion of Judah + GERD + Acts 8 + Psalm 68. All frameworks [PAT].',
+   tabs:['overview','esoteric','scripture','dominion'],
+   triggers:['The Ark of the Covenant in Axum — evidence and theology','Acts 8 Ethiopian eunuch and the origin of African Christianity','Queen of Sheba and the Solomonic covenant thread','GERD as fulfillment of Isaiah 19:5 — the Nile drying up'],
+  },
+
+  {id:'CDI-021',type:'CDI',collection:'CDI',access:'paid',price:15,
+   title:'Nigeria',subtitle:'Federal Republic of Nigeria · The Confluence Nation',
+   archetype:'Confluence Nation',arch_conf:4,
+   dom_primary:'Federal',dom_score:6,dom_secondary:'Resource (Oil Delta)',dom2_score:6,
+   element:'Water / Earth',trajectory:'Cyclical tension',traj_phase:'Contested stability',
+   tier:'Ancient (Nok c. 900 BCE)',
+   scores:{territorial:7,cohesion:4,military:7,symbolic:7,economic:7,momentum:5},
+   summary:[
+     {k:'Classification',v:'Federal Confluence State · Orisha Heritage + Oil Delta + Pentecostal Epicenter'},
+     {k:'Scale',v:'220M+ people — largest African population; 250+ ethnic groups; 500+ languages'},
+     {k:'Ancient identities',v:'Nok culture (900 BCE) · Yoruba kingdoms · Benin Empire · Hausa city-states · Igbo communities'},
+     {k:'Prophetic weight',v:'Largest simultaneous Christian + Muslim population in sub-Saharan Africa in one state — unique eschatological pressure point'},
+   ],
+   watchpoints:[
+     {t:'Ethno-religious balance',b:'Christian south / Muslim north fault line; Boko Haram / ISWAP northeast; Fulani-farmer conflicts.',crit:true},
+     {t:'Resource governance',b:'Oil wealth (Niger Delta) vs. poverty; 2023 subsidy removal crisis; resource curse active.'},
+     {t:'Continental leadership',b:'Africa\'s largest economy (with South Africa); AU and ECOWAS anchor state; Pentecostal reverse mission to Global North.'},
+   ],
+   scripture:[
+     {ref:'Acts 2:10',note:'"Visitors from Rome — both Jews and converts... Egyptians and parts of Libya" — Africa present at founding of the church at Pentecost'},
+     {ref:'Put / Cush corridor',note:'General West African associations; some scholars locate Cush lineages in Nigeria corridor (interpretive)'},
+   ],
+   apostolic:'No early apostolic seat. Africa\'s fastest-growing Christianity. Redeemed Christian Church of God in 198 countries. Largest Pentecostal reverse-mission movement globally.',
+   endtimes:'Unique pressure point as largest simultaneous Christian-Muslim state. Continental influencer; not primary apocalyptic throne [PAT].',
+   tabs:['overview','esoteric','scripture','dominion'],
+   triggers:['Orisha tradition and the Ifa oracle — theology review','Ile-Ife as cosmic origin point in Yoruba cosmology','Nigeria as Pentecostal epicenter and the reverse mission','Nok culture and the ancient African civilizational record'],
+   previewBody:`<div class="scroll-body"><p>Nigeria is the only nation on earth simultaneously holding the largest Muslim population and the largest Pentecostal Christian movement in sub-Saharan Africa. This is not merely demographic. It is, in prophetic geography terms, a convergence point — a nation whose internal tension mirrors the global tension between the two most expansive post-biblical religious systems...</p><p style="color:var(--ink-ghost);font-style:italic">[Full CDI entry available — 36-field analysis · includes dominion index, prophetic watchpoints, scripture anchors, and apostolic links]</p></div>`,
+  },
+
+  // ── FRAMEWORKS ──
+  {id:'ARC-001',type:'ARC',collection:'ARC',access:'member',
+   title:'SON Registry Operating Model',subtitle:'The governing architecture of the School of the Nabi archive',
+   summary:[
+     {k:'Function',v:'Defines all collection codes, output types, intake protocol, and archive governance rules. Source-of-truth layer for the entire SON system.'},
+     {k:'Collections defined',v:'VEL · ZION · WAT · PRT · RED · GNT · STU · CDI · ARC · WP · COS + CSRT constitutional scrolls'},
+     {k:'Output types',v:'SCROLL · STU · ARC · CDI · WP · CSRT · COMP (companion) · SUPP (supplement)'},
+     {k:'Intake rule',v:'Every work requires code, collection, output type, canonical title, working label, status, and public flag before archive registration.'},
+     {k:'Registry rule',v:'The registry is the source of truth. The viewer is presentation. The Drive is the archive. Nothing renders without a registry row.'},
+   ],
+   tabs:['summary'],
+   triggers:['Full registry export to JSON — how to connect Drive to the portal','Collection matrix — all defined codes and their scope','Output type schema — field definitions per work type'],
+  },
+
+  {id:'WP-001',type:'WP',collection:'WP',access:'paid',price:22,
+   title:'The Household Covenant',subtitle:'Women, Objects, and the Material Theology of Genesis',
+   burden:'The covenant is carried in objects before it is spoken in words',
+   anchor:'Genesis 24:22; Genesis 35:4; Genesis 38:18',
+   summary:[
+     {k:'Thesis',v:'The material objects of Genesis — rings, bracelets, staffs, garments — are not cultural incidentals. They are covenant-carrying instruments. The household manages covenant transmission through tangible, transferable objects before the Mosaic law establishes verbal/written forms.'},
+     {k:'Scope',v:'Genesis 24 (Rebekah\'s betrothal gifts) → Genesis 31 (household gods/teraphim) → Genesis 35:4 (Jacob buries foreign gods) → Genesis 38:18 (Judah\'s pledge objects) → Genesis 50:25 (Joseph\'s bones as covenant object)'},
+     {k:'Disciplines',v:'Material theology · covenant theology · ancient Near East household religion · feminist biblical studies'},
+   ],
+   scripture:[
+     {ref:'Genesis 24:22',note:'Gold earring and bracelets given to Rebekah — covenant objects preceding verbal betrothal agreement'},
+     {ref:'Genesis 31:19',note:'Rachel steals Laban\'s teraphim — household gods as covenant and inheritance instruments'},
+     {ref:'Genesis 38:18',note:'Judah\'s signet, cord, and staff as pledge — the three objects later become his identity and judgment'},
+     {ref:'Genesis 50:25',note:'"Joseph took an oath... ye shall carry up my bones" — the body itself becomes a covenant object'},
+   ],
+   tabs:['summary','scripture'],
+   triggers:['WP: The Material Covenant — from Genesis to Tabernacle','Teraphim and household religion in the ANE','Genesis 38 and the theology of pledge objects','Rachel and the theft of blessing — a full reading'],
+   previewBody:`<div class="scroll-body"><p>The first covenant transaction in the Abraham narrative involving material objects is the purchase of the cave of Machpelah (Genesis 23). Abraham insists on paying full price. The field, the cave, the trees — all are catalogued precisely. This is not real-estate formality. It is covenant anchoring: the promise of land is being given physical form while the land is still occupied by strangers...</p><p style="color:var(--ink-ghost);font-style:italic">[Full paper available — 34 pages · includes material theology framework, ANE comparative study, and Tabernacle typology appendix]</p></div>`,
+  },
+];
+
+let activeId = 'home';
+let activeTab = 0;
+let filters = new Set();
+let srch = '';
+
+function getColor(type) {
+  return TYPE_COLOR[type] || 'var(--ink-soft)';
+}
+function getColColor(code) {
+  return COLLECTIONS[code]?.color || 'var(--ink-soft)';
+}
+function getColPale(code) {
+  return COLLECTIONS[code]?.pale || 'var(--parch-mid)';
+}
+
+function tf(f) {
+  if(filters.has(f)) filters.delete(f); else filters.add(f);
+  document.querySelectorAll('.fc').forEach(c => {
+    const fn = c.getAttribute('onclick').match(/'([^']+)'/)[1];
+    c.classList.toggle('on', filters.has(fn));
+  });
+  renderList();
+}
+
+function filterEntries() {
+  srch = document.getElementById('srch').value.toLowerCase();
+  renderList();
+}
+
+function matchEntry(e) {
+  if(srch && !e.title.toLowerCase().includes(srch) && !(e.subtitle||'').toLowerCase().includes(srch) && !(e.archetype||'').toLowerCase().includes(srch) && !(e.collection||'').toLowerCase().includes(srch)) return false;
+  if(filters.size === 0) return true;
+  for(const f of filters) {
+    if(f === e.type) return true;
+    if(f === e.collection) return true;
+    if(f === 'FREE' && e.access === 'free') return true;
+    if(f === 'SCROLL' && e.type === 'SCROLL') return true;
+    if(f === 'STU' && e.type === 'STU') return true;
+    if(f === 'CDI' && e.type === 'CDI') return true;
+    if(f === 'ARC' && e.type === 'ARC') return true;
+    if(f === 'WP' && e.type === 'WP') return true;
+    if(f === 'VEL' && e.collection === 'VEL') return true;
+    if(f === 'ZION' && e.collection === 'ZION') return true;
+    if(f === 'WAT' && e.collection === 'WAT') return true;
+  }
+  return false;
+}
+
+function renderList() {
+  const list = document.getElementById('sb-list');
+  const filtered = ENTRIES.filter(matchEntry);
+  document.getElementById('sb-ct').textContent = filtered.length + ' of ' + ENTRIES.length + ' entries · 200+ total';
+  const byType = {};
+  filtered.forEach(e => { if(!byType[e.type]) byType[e.type] = []; byType[e.type].push(e); });
+  const ORDER = ['SCROLL','STU','CDI','WP','ARC'];
+  let html = '';
+  ORDER.forEach(t => {
+    if(!byType[t]) return;
+    const typeLabel = {SCROLL:'Scrolls',STU:'Studies',CDI:'Nation Index (CDI)',WP:'World Papers',ARC:'Frameworks'}[t]||t;
+    html += `<div style="padding:6px 14px 3px;font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-ghost);background:var(--parch-mid);border-bottom:1px solid var(--sb)">${typeLabel}</div>`;
+    byType[t].forEach(e => {
+      const ac = e.id===activeId?' on':'';
+      const badge = e.access==='free'?`<span class="er-badge b-free">Free</span>`
+        : e.access==='member'?`<span class="er-badge b-member">Member</span>`
+        : `<span class="er-badge b-paid">$${e.price}</span>`;
+      html += `<div class="er${ac}" onclick="selectEntry('${e.id}')">
+        <div class="er-bar" style="background:${getColor(e.type)}"></div>
+        <div class="er-info">
+          <div class="er-code">${e.id}</div>
+          <div class="er-name">${e.title}</div>
+          <div class="er-sub">${e.subtitle||e.archetype||''}</div>
+          ${badge}
+        </div>
+      </div>`;
+    });
+  });
+  list.innerHTML = html || '<div style="padding:20px 14px;font-family:var(--fb);font-size:13px;font-style:italic;color:var(--ink-ghost)">No entries match.</div>';
+}
+
+function showHome() {
+  activeId = 'home';
+  document.getElementById('home-view').style.display = 'flex';
+  document.getElementById('entry-view').style.display = 'none';
+  document.querySelectorAll('.er').forEach(r => r.classList.remove('on'));
+  buildHomeCollections();
+}
+
+function buildHomeCollections() {
+  const el = document.getElementById('home-cols');
+  if(!el) return;
+  el.innerHTML = Object.entries(COLLECTIONS).map(([code,c]) => {
+    const ct = ENTRIES.filter(e=>e.collection===code).length;
+    return `<div class="hc"><div class="hc-code">${code}</div><div class="hc-name">${c.name}</div><div class="hc-desc">${c.desc}</div><div class="hc-ct">${ct} entries loaded</div></div>`;
+  }).join('');
+}
+
+function selectEntry(id) {
+  activeId = id; activeTab = 0;
+  const e = ENTRIES.find(x=>x.id===id);
+  if(!e) return;
+  document.getElementById('home-view').style.display = 'none';
+  const ev = document.getElementById('entry-view');
+  ev.style.display = 'flex';
+  renderList();
+  renderEntry(e);
+}
+
+function switchTab(i) {
+  activeTab = i;
+  document.querySelectorAll('.tab').forEach((t,idx) => t.classList.toggle('on', idx===i));
+  document.querySelectorAll('.panel').forEach((p,idx) => p.classList.toggle('on', idx===i));
+}
+
+function tagHtml(tags) {
+  return (tags||[]).map(t=>`<span class="tag tag-${t.toLowerCase()}">${t}</span>`).join('');
+}
+
+function renderEntry(e) {
+  const ev = document.getElementById('entry-view');
+  const colName = COLLECTIONS[e.collection]?.name || e.collection;
+  const colColor = getColColor(e.collection);
+  const colPale = getColPale(e.collection);
+  const accessBadge = e.access==='free'
+    ? `<span class="e-access" style="background:var(--teal-pale);color:var(--teal)">Free access</span>`
+    : e.access==='member'
+    ? `<span class="e-access" style="background:var(--purp-pale);color:var(--purple)">Member</span>`
+    : `<span class="e-access" style="background:var(--gold-pale);color:var(--gold)">$${e.price}</span>`;
+
+  const summaryCards = buildSummaryCards(e);
+  const scoreHtml = buildScores(e);
+  const tabDefs = buildTabs(e);
+  const tabBar = tabDefs.map((t,i)=>`<button class="tab${i===0?' on':''}" onclick="switchTab(${i})">${t.label}</button>`).join('');
+  const panels = tabDefs.map((t,i)=>`<div class="panel${i===0?' on':''}">${t.html}</div>`).join('');
+  const obtainHtml = buildObtain(e);
+  const trigHtml = (e.triggers||[]).map(t=>`<button class="trig">${t}</button>`).join('');
+  const filtered = ENTRIES.filter(matchEntry);
+  const idx = filtered.findIndex(x=>x.id===e.id);
+  const prev = filtered[idx-1];
+  const next = filtered[idx+1];
+
+  ev.innerHTML = `
+    <div class="e-head">
+      <div class="e-topline">
+        <span class="e-entrynum">${e.id}</span>
+        <span class="e-collection" style="background:${colPale};color:${colColor}">${colName}</span>
+        ${accessBadge}
+      </div>
+      <div class="e-title">${e.title}</div>
+      ${e.subtitle?`<div class="e-subtitle">${e.subtitle}</div>`:''}
+      ${e.burden?`<div style="font-family:var(--fm);font-size:9px;letter-spacing:.08em;color:var(--gold);margin-top:6px;text-transform:uppercase">${e.burden}</div>`:''}
+    </div>
+    ${summaryCards}
+    ${scoreHtml}
+    <div class="e-tabs">${tabBar}</div>
+    <div class="e-body" style="flex:1;overflow-y:auto">${panels}</div>
+    ${obtainHtml}
+    ${trigHtml?`<div class="triggers">${trigHtml}</div>`:''}
+    <div class="e-nav">
+      <button class="e-nav-btn" onclick="${prev?`selectEntry('${prev.id}')`:'showHome()'}">${prev?'&larr; '+prev.title:'&larr; Archive home'}</button>
+      <span class="e-nav-pos">${idx+1} of ${filtered.length}</span>
+      <button class="e-nav-btn" onclick="${next?`selectEntry('${next.id}')`:''}" ${!next?'disabled':''} style="${!next?'opacity:.4;cursor:default':''}">${next?next.title+' &rarr;':'End of results'}</button>
+    </div>
+  `;
+}
+
+function buildSummaryCards(e) {
+  if(e.type === 'CDI') return `
+    <div class="e-summary">
+      <div class="sc sc-arch"><div class="sc-lbl">Archetype</div><div class="sc-val">${e.archetype}</div><div class="sc-sub">${e.arch_conf}/5 confidence</div></div>
+      <div class="sc sc-dom"><div class="sc-lbl">Primary dominion</div><div class="sc-val">${e.dom_primary}</div><div class="sc-sub">${e.dom_score}/10</div></div>
+      ${e.dom_secondary?`<div class="sc sc-dom" style="opacity:.85"><div class="sc-lbl">Secondary</div><div class="sc-val">${e.dom_secondary}</div><div class="sc-sub">${e.dom2_score}/10</div></div>`:''}
+      <div class="sc sc-el"><div class="sc-lbl">Element</div><div class="sc-val">${e.element}</div></div>
+      <div class="sc sc-traj"><div class="sc-lbl">Trajectory</div><div class="sc-val">${e.trajectory}</div><div class="sc-sub">${e.traj_phase}</div></div>
+      <div class="sc sc-tier"><div class="sc-lbl">Age tier</div><div class="sc-val">${e.tier}</div></div>
+    </div>`;
+  if(e.type === 'SCROLL') return `
+    <div class="e-summary">
+      <div class="sc sc-scroll"><div class="sc-lbl">Output type</div><div class="sc-val">Scroll</div><div class="sc-sub">${e.collection} collection</div></div>
+      ${e.anchor?`<div class="sc sc-scrip"><div class="sc-lbl">Primary anchor</div><div class="sc-val" style="font-family:var(--fm);font-size:10px;line-height:1.4">${e.anchor}</div></div>`:''}
+      <div class="sc sc-tier"><div class="sc-lbl">Access</div><div class="sc-val">${e.access==='free'?'Open access':'Paid scroll'}</div></div>
+    </div>`;
+  if(e.type === 'STU') return `
+    <div class="e-summary">
+      <div class="sc sc-col"><div class="sc-lbl">Output type</div><div class="sc-val">Study series</div><div class="sc-sub">${e.collection} collection</div></div>
+      ${e.anchor?`<div class="sc sc-scrip"><div class="sc-lbl">Primary anchor</div><div class="sc-val" style="font-family:var(--fm);font-size:10px;line-height:1.4">${e.anchor}</div></div>`:''}
+    </div>`;
+  return `<div class="e-summary"><div class="sc sc-tier"><div class="sc-lbl">Type</div><div class="sc-val">${e.type}</div></div></div>`;
+}
+
+function buildScores(e) {
+  if(!e.scores) return '';
+  const s = e.scores;
+  const bar = (lbl, val, col) => `<div class="si"><span class="si-lbl">${lbl}</span><div class="si-bar"><div class="si-fill" style="width:${Math.round(val*10)}%;background:${col}"></div></div><span class="si-num">${val}</span></div>`;
+  return `<div class="e-scores">
+    ${bar('Territorial',s.territorial,'#1a5440')}
+    <div class="sdiv"></div>
+    ${bar('Cohesion',s.cohesion,'#b8922a')}
+    <div class="sdiv"></div>
+    ${bar('Military',s.military,'#3d2a6e')}
+    <div class="sdiv"></div>
+    ${bar('Symbolic',s.symbolic,'#3d2a6e')}
+    <div class="sdiv"></div>
+    ${bar('Economic',s.economic,'#7a1818')}
+    <div class="sdiv"></div>
+    ${bar('Momentum',s.momentum,'#7a7060')}
+  </div>`;
+}
+
+function buildTabs(e) {
+  const tabs = [];
+  if(e.type === 'CDI') {
+    tabs.push({label:'Overview', html: buildCDIOverview(e)});
+    tabs.push({label:'Esoteric', html: buildCDIEsoteric(e)});
+    tabs.push({label:'Scripture', html: buildScripture(e)});
+    tabs.push({label:'Dominion', html: buildCDIDominion(e)});
+  } else if(e.type === 'SCROLL' || e.type === 'STU' || e.type === 'WP') {
+    tabs.push({label:'Overview', html: buildSummaryPanel(e)});
+    tabs.push({label:'Scripture', html: buildScripture(e)});
+    if(e.access === 'free' && e.body) {
+      tabs.push({label:'Full text', html: `<div class="panel-body">${e.body}</div>`});
+    } else if(e.previewBody) {
+      tabs.push({label:'Preview', html: `<div class="panel-body">${e.previewBody}</div>`});
+    }
+  } else {
+    tabs.push({label:'Overview', html: buildSummaryPanel(e)});
+  }
+  return tabs;
+}
+
+function buildSummaryPanel(e) {
+  const rows = (e.summary||[]).map(r=>`<div class="fr"><div class="fk">${r.k}</div><div class="fv">${r.v}</div></div>`).join('');
+  return `<div class="fg"><div class="fg-title">Summary</div>${rows}</div>`;
+}
+
+function buildCDIOverview(e) {
+  const rows = (e.summary||[]).map(r=>`<div class="fr"><div class="fk">${r.k}</div><div class="fv">${r.v}</div></div>`).join('');
+  return `<div class="fg"><div class="fg-title">Identity & classification</div>${rows}</div>`;
+}
+
+function buildCDIEsoteric(e) {
+  const wCards = (e.watchpoints||[]).map(w=>
+    `<div class="wcard${w.crit?' crit':''}"><div class="wcard-t">${w.t}</div><div class="wcard-b">${w.b}</div></div>`
+  ).join('');
+  return `
+    <div class="pat-banner">All content in this volume carries [PAT] classification — prophetic and interpretive, not doctrinal assertion.</div>
+    ${wCards?`<div class="fg"><div class="fg-title">Prophetic watchpoints</div>${wCards}</div>`:''}
+    ${e.endtimes?`<div class="fg"><div class="fg-title">End-times role <span class="tag tag-pat">PAT</span></div><div class="fv" style="padding:8px 0;font-style:italic">${e.endtimes}</div></div>`:''}`;
+}
+
+function buildScripture(e) {
+  const anchors = (e.scripture||[]).map(s=>
+    `<div class="sa"><div class="sa-ref">${s.ref}</div><div class="sa-note">${s.note}</div></div>`
+  ).join('');
+  const ap = e.apostolic?`<div class="fg" style="margin-top:1rem"><div class="fg-title">Apostolic & messianic links</div><div class="fv" style="padding:6px 0;line-height:1.7">${e.apostolic}</div></div>`:'';
+  return `<div class="fg"><div class="fg-title">Scriptural anchors</div>${anchors||'<div class="fv" style="padding:6px 0;font-style:italic;color:var(--ink-ghost)">No anchors recorded.</div>'}</div>${ap}`;
+}
+
+function buildCDIDominion(e) {
+  return `
+    <div class="dom-box">
+      <div class="dom-main">${e.archetype||''} · ${e.dom_primary||''} Dominion</div>
+      <div class="dom-sub">${e.element||''} · ${e.trajectory||''}</div>
+    </div>
+    <div class="g2">
+      <div class="mc"><div class="mc-l">Primary dominion</div><div class="mc-v">${e.dom_primary} · ${e.dom_score}/10</div></div>
+      <div class="mc"><div class="mc-l">Secondary dominion</div><div class="mc-v">${e.dom_secondary||'—'} · ${e.dom2_score||'—'}/10</div></div>
+      <div class="mc"><div class="mc-l">Archetype confidence</div><div class="mc-v">${e.arch_conf}/5</div></div>
+      <div class="mc"><div class="mc-l">Age tier</div><div class="mc-v">${e.tier}</div></div>
+    </div>`;
+}
+
+function buildObtain(e) {
+  if(e.access === 'free') {
+    return `<div class="obtain-panel">
+      <div><div class="op-free">Open access — no cost</div><div class="op-desc">This scroll is freely available. Read, share, and study freely.</div></div>
+      <button class="op-btn free">Read full scroll</button>
+    </div>`;
+  }
+  if(e.access === 'member') {
+    return `<div class="obtain-panel">
+      <div><div class="op-free" style="color:var(--purple)">Archive member access</div><div class="op-desc">Available to SON archive members.</div></div>
+      <button class="op-btn member">Join the archive</button>
+    </div>`;
+  }
+  return `<div class="obtain-panel">
+    <div><div class="op-price">$${e.price}</div><div class="op-desc">Full PDF · immediate delivery · permanent access</div></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="op-btn" onclick="alert('Connect your Gumroad or Stripe link here for: '+('${e.id}'))">Obtain this scroll</button>
+    </div>
+  </div>`;
+}
+
+renderList();
+buildHomeCollections();
+</script>
+</body>
+</html>
